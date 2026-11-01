@@ -21,11 +21,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'npm'
 
       - name: Install frontend dependencies & run V2 security test suite
         run: |
-          npm ci
+          npm install --legacy-peer-deps
           npm test
           npm run build
 
@@ -40,7 +39,7 @@ jobs:
       - name: Generate Windows icon & compile standalone Portable EXE
         shell: pwsh
         run: |
-          npx --yes @tauri-apps/cli@^2.0.0 icon public/icon-512.png
+          npx --yes @tauri-apps/cli@^2.0.0 icon public/pwa-512x512.png
           npx --yes @tauri-apps/cli@^2.0.0 build --no-bundle
           New-Item -ItemType Directory -Force -Path dist-portable/aegis-data | Out-Null
           Copy-Item "src-tauri/target/release/aegis-vault-portable.exe" "dist-portable/AegisVault-Portable.exe"
@@ -53,7 +52,7 @@ jobs:
           path: dist-portable/
 
   # ============================================================================
-  # Job 2: Foundational Android App (.apk with FLAG_SECURE & Autofill Bridge ready)
+  # Job 2: Foundational Android App (.apk with Autofill Bridge ready)
   # ============================================================================
   build-android-apk:
     name: Android 基础版安装包 (.apk)
@@ -66,7 +65,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'npm'
 
       - name: Setup Java 21 for Android Gradle build
         uses: actions/setup-java@v4
@@ -79,9 +77,9 @@ jobs:
 
       - name: Build Web bundle & generate Capacitor Android project
         run: |
-          npm ci
+          npm install --legacy-peer-deps
           npm run build
-          npm install --no-save @capacitor/core@^7.0.0 @capacitor/cli@^7.0.0 @capacitor/android@^7.0.0
+          npm install --legacy-peer-deps @capacitor/core@^7.0.0 @capacitor/cli@^7.0.0 @capacitor/android@^7.0.0
           npx cap add android
           npx cap sync android
 

@@ -2,7 +2,6 @@
   "appId": "com.aegisvault.app",
   "appName": "AegisVault",
   "webDir": "dist",
-  "bundledWebRuntime": false,
   "server": {
     "androidScheme": "https"
   }
